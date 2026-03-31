@@ -1,0 +1,5 @@
+{
+  "name": "Striper",
+  "description": "A financial dashboard for tracking sales, profits, and managing withdrawals via PIX or bank transfer.",
+  "requestFramePermissions": []
+}
