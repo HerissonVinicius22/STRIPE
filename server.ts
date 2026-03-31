@@ -260,9 +260,17 @@ app.delete("/api/admin/transactions/:id", authenticate, isAdmin, async (req, res
   }
 });
 
+let isInitialized = false;
+
+app.use(async (req, res, next) => {
+  if (!isInitialized) {
+    await initDb();
+    isInitialized = true;
+  }
+  next();
+});
+
 async function startServer() {
-  await initDb();
-  
   if (process.env.NODE_ENV !== "production") {
     const vite = await createViteServer({
       server: { middlewareMode: true },
@@ -283,6 +291,10 @@ async function startServer() {
   });
 }
 
-startServer().catch(err => {
-  console.error("Failed to start server:", err);
-});
+if (!process.env.VERCEL) {
+  startServer().catch(err => {
+    console.error("Failed to start server:", err);
+  });
+}
+
+export default app;
